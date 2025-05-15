@@ -1,0 +1,14 @@
+yaoyonstudio/flask-pyjwt-auth
+joegasewicz/flask-jwt-router
+auth0-blog/jwts-in-python
+conda-forge/pyjwt-feedstock
+GuillaumeFalourd/poc-encryption-jwt
+datajoint/pharus
+a-luna/flask-api-tutorial
+mosquito/pyjwt-rsa
+Septem151/Flask_PyJWT
+lysenkoivan/pyjwt_example
+theshohidul/FastAPI-Boilerplate
+codeperfectplus/FlaskBlogAPI
+stribny/flask-api-quickstart
+lpdswing/flask-pyjwt-demo

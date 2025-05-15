@@ -1,0 +1,65 @@
+# .github/workflows/variant-analysis.yml
+name: CodeQL Variant Analysis - PyJWT
+
+on:
+  workflow_dispatch: # Permet de lancer manuellement le workflow depuis l'onglet Actions
+  # Vous pouvez aussi ajouter d'autres déclencheurs, comme un 'push' sur la branche main
+  # push:
+  #   branches:
+  #     - main
+
+permissions:
+  # Nécessaire pour que l'action puisse soumettre les tâches d'analyse de variantes
+  # et potentiellement lire les dépôts (si privés et si le token par défaut est utilisé)
+  security-events: write
+  actions: read # Pour lire les métadonnées du workflow
+
+jobs:
+  run-variant-analysis:
+    name: Run CodeQL Variant Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Controller Repository
+        uses: actions/checkout@v4
+        # Ceci récupère le contenu de votre dépôt contrôleur (requêtes, listes)
+
+      # Optionnel : Si vous avez besoin de construire votre pack CodeQL (généralement pas nécessaire pour des requêtes simples)
+      # ou si vous voulez utiliser une version spécifique de la CLI CodeQL.
+      # - name: Initialize CodeQL
+      #   uses: github/codeql-action/init@v3
+      #   with:
+      #     # Inutile pour variant analysis si vous spécifiez 'language' et 'query-pack' ci-dessous
+      #     # languages: python
+
+      - name: Perform CodeQL Variant Analysis
+        uses: github/codeql-action/analyze@v3 # Ou la dernière version stable
+        id: variant-analysis # Un id pour cette étape si vous voulez référencer ses sorties
+        with:
+          # Le dépôt contrôleur est implicitement celui-ci.
+          # controller-repo: ${{ github.repository }}
+
+          # Chemin vers votre pack de requêtes dans ce dépôt contrôleur
+          query-pack: ./custom-codeql-queries-python
+
+          # Langage des bases de données CodeQL à générer pour les dépôts cibles
+          language: python
+
+          # Chemin vers le fichier (ou les fichiers) contenant la liste des dépôts à analyser
+          repo-lists: ./repo-lists/python-pyjwt-targets.txt
+
+          # Optionnel: Une catégorie pour les résultats de cette analyse dans l'interface Code Scanning du dépôt contrôleur.
+          # Utile si vous lancez plusieurs analyses de variantes depuis le même contrôleur.
+          category: "pyjwt-variant-analysis"
+
+          # Par défaut, les résultats sont téléchargés en tant qu'artefact SARIF nommé "sarif-results"
+          # et visibles dans l'onglet "Security" > "Code scanning" > "Variant analysis results" de ce dépôt contrôleur.
+
+      # Optionnel: Pour déboguer, vous pouvez lister le contenu de l'artefact produit
+      # - name: Show SARIF artifact contents
+      #   run: |
+      #     echo "SARIF results will be in an artifact."
+      #     # Le téléchargement d'artefacts est géré par l'action 'analyze' elle-même
+      #     # ou vous pouvez ajouter une étape 'actions/upload-artifact' si vous voulez
+      #     # des artefacts supplémentaires ou différents.
+      #     # L'action 'analyze' crée un artefact nommé 'sarif-results' par défaut.
