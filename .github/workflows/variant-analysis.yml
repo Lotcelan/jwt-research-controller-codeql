@@ -46,7 +46,7 @@ jobs:
           language: python
 
           # Chemin vers le fichier (ou les fichiers) contenant la liste des dépôts à analyser
-          repo-lists: ./repo-lists/python-pyjwt-targets.txt
+          repo-lists: ./repo-lists/python_pyjwt_repos.txt
 
           # Optionnel: Une catégorie pour les résultats de cette analyse dans l'interface Code Scanning du dépôt contrôleur.
           # Utile si vous lancez plusieurs analyses de variantes depuis le même contrôleur.
